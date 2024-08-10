@@ -5,7 +5,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/common/bootstrap.cmake" NO_POLICY_SCO
 project(${_name} VERSION ${_version})
 
 option(ENABLE_FRONTEND_API "Use obs-frontend-api for UI functionality" OFF)
-option(ENABLE_QT "Use Qt functionality" OFF)
+option(ENABLE_QT "Use Qt functionality" ON)
 
 include(compilerconfig)
 include(defaults)
@@ -34,6 +34,27 @@ if(ENABLE_QT)
                AUTORCC ON)
 endif()
 
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.c)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+  ./src/pch.h
+  ./src/obs-multi-rtmp.h
+  ./src/obs-multi-rtmp.cpp 
+  ./src/edit-widget.h
+  ./src/edit-widget.cpp
+  ./src/push-widget.h
+  ./src/push-widget.cpp
+  ./src/json-util.hpp
+  ./src/output-config.h
+  ./src/output-config.cpp
+  ./src/output-config-legacy.cpp
+  ./src/obs-properties-widget.h
+  ./src/obs-properties-widget.cpp
+  ./src/protocols.h
+  ./src/protocols.cpp
+)
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+  ./dep/nlohmann-json
+  .deps/obs-studio-30.1.2/libobs
+)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
